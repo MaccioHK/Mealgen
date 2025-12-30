@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Meal Generator</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Meal Generator (Prototype)</h1>
+
+    <form method="post" action="/generate" class="card">
+      <h2>1) Choose category</h2>
+      <label><input type="radio" name="category" value="seafood" checked /> Seafood</label>
+      <label><input type="radio" name="category" value="meat" /> Meat</label>
+
+      <h2>2) Exclusions</h2>
+      <label><input type="checkbox" name="exclusions" value="beef" /> Exclude beef</label>
+      <label><input type="checkbox" name="exclusions" value="pork" /> Exclude pork</label>
+      <label><input type="checkbox" name="exclusions" value="lamb" /> Exclude lamb</label>
+
+      <h2>3) Number of people</h2>
+      <input type="number" name="persons" min="1" max="12" value="2" />
+
+      <h2>4) Meal type</h2>
+      <label><input type="radio" name="meal_type" value="daily" checked /> Daily meal</label>
+      <label><input type="radio" name="meal_type" value="special" /> Special meal</label>
+      <label><input type="radio" name="meal_type" value="festival" /> Festival meal</label>
+
+      <div class="grid">
+        <div class="box">
+          <h3>5) Special options</h3>
+          <select name="special_kind">
+            <option value="">(only if Special)</option>
+            <option value="anniversary">Anniversary</option>
+            <option value="wedding">Wedding</option>
+            <option value="friends">Friends</option>
+          </select>
+        </div>
+
+        <div class="box">
+          <h3>5) Festival options</h3>
+          <select name="festival_kind">
+            <option value="">(only if Festival)</option>
+            <option value="easter">Easter</option>
+            <option value="christmas">Christmas</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit">Generate</button>
+    </form>
+
+    <p class="hint">
+      Note: this prototype picks from a small seeded recipe set in SQLite.
+      You can add more recipes later via an admin screen or CSV import.
+    </p>
+  </div>
+</body>
+</html>
