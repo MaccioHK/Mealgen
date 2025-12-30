@@ -4,6 +4,12 @@ from .schemas import GenerateRequest
 from .models import Recipe
 from .repository import RecipeRepository
 
+# Tag conventions (kept as strings for the prototype, but centralised to avoid drift)
+TAG_DAILY = "daily"
+TAG_SPECIAL_PREFIX = "special:"
+TAG_FESTIVAL_PREFIX = "festival:"
+TAG_EXCLUDE_PREFIX = "exclude:"
+
 def _parse_tags(tags_str: str) -> set[str]:
     return {t.strip().lower() for t in tags_str.split(",") if t.strip()}
 
@@ -12,26 +18,26 @@ def _matches(req: GenerateRequest, recipe: Recipe) -> bool:
 
     # meal type matching
     if req.meal_type == "daily":
-        if "daily" not in tags:
+        if TAG_DAILY not in tags:
             return False
 
     elif req.meal_type == "special":
         if req.special_kind is None:
             return False
-        if f"special:{req.special_kind.lower()}" not in tags:
+        if f"{TAG_SPECIAL_PREFIX}{req.special_kind.lower()}" not in tags:
             return False
 
     elif req.meal_type == "festival":
         if req.festival_kind is None:
             return False
-        if f"festival:{req.festival_kind.lower()}" not in tags:
+        if f"{TAG_FESTIVAL_PREFIX}{req.festival_kind.lower()}" not in tags:
             return False
     else:
         return False
 
     # exclusions: if user excludes beef, recipe must NOT contain exclude:beef
     for ex in req.exclusions:
-        if f"exclude:{ex.lower()}" in tags:
+        if f"{TAG_EXCLUDE_PREFIX}{ex.lower()}" in tags:
             return False
 
     return True
@@ -40,6 +46,9 @@ def scale_ingredients(ingredients_text: str, base_servings: int, target_servings
     """
     Simple scaling: assumes lines like "200 g prawns" or "2 tbsp olive oil"
     We only scale leading numeric values (int/float) for prototype.
+
+    Assumption: ingredient lines start with a numeric quantity.
+    e.g. "200 g prawns". Non-numeric lines are left unchanged.
     """
     import re
 
