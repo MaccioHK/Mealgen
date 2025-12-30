@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Generated Meal</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Generated result</h1>
+
+    {% if result is none %}
+      <div class="card">
+        <p><strong>No matching recipe found</strong> for your choices.</p>
+        <p>Try changing meal type/options or remove some exclusions.</p>
+      </div>
+    {% else %}
+      <div class="card">
+        <h2>{{ result.name }}</h2>
+        <p class="meta">
+          Category: {{ result.category }} · Serves: {{ result.persons }} · Meal type: {{ result.meal_type }}
+          {% if result.special_kind %} · Special: {{ result.special_kind }}{% endif %}
+          {% if result.festival_kind %} · Festival: {{ result.festival_kind }}{% endif %}
+        </p>
+
+        <h3>Ingredients (scaled)</h3>
+        <pre class="block">{{ result.ingredients }}</pre>
+
+        <h3>Recipe steps</h3>
+        <pre class="block">{{ result.steps }}</pre>
+      </div>
+    {% endif %}
+
+    <p><a href="/">← Back</a></p>
+  </div>
+</body>
+</html>
