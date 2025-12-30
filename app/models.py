@@ -14,6 +14,9 @@ class Recipe(Base):
     category: Mapped[str] = mapped_column(String(20), nullable=False)
 
     # comma-separated tags for quick prototype:
+    # - "daily" OR "special:<type>" OR "festival:<type>"
+    # - "exclude:<ingredient>" means the recipe CONTAINS that ingredient
+    #   (so it will be filtered out when the user excludes that ingredient)
     # e.g. "daily", "festival:christmas", "special:wedding", "exclude:beef"
     tags: Mapped[str] = mapped_column(String(500), nullable=False, default="")
 
