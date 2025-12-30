@@ -52,6 +52,15 @@ def generate(
         repo = RecipeRepository(db)
         service = MealGeneratorService(repo)
 
+        # Browsers/frameworks can send missing checkbox lists as None.
+        exclusions = exclusions or []
+
+        # Ensure irrelevant option fields don't accidentally influence matching.
+        if meal_type != "special":
+            special_kind = None
+        if meal_type != "festival":
+            festival_kind = None
+
         req = GenerateRequest(
             category=category,
             exclusions=exclusions,
@@ -68,4 +77,3 @@ def generate(
         )
     finally:
         db.close()
-
